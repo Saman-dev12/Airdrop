@@ -1,13 +1,13 @@
 import { useState } from "react";
 import Navbar from "./Navbar";
-import { useWallet } from "@solana/wallet-adapter-react";
-import { clusterApiUrl, Connection ,LAMPORTS_PER_SOL} from "@solana/web3.js";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { LAMPORTS_PER_SOL} from "@solana/web3.js";
 
 function Airdrop() {
     const [amount, setAmount] = useState<number>(0)
     const wallet = useWallet()
-    
-    const addSol = () => {
+    const {connection} = useConnection()
+    const addSol = async() => {
         if(amount <= 0) {
             alert('Please enter a valid amount')
             return
@@ -16,8 +16,8 @@ function Airdrop() {
             alert('Please connect your wallet')
             return
         }
-        const connection =  new Connection(clusterApiUrl('devnet'), 'confirmed')
-        connection.requestAirdrop(wallet.publicKey, amount * LAMPORTS_PER_SOL).then(() => {
+        
+        await connection.requestAirdrop(wallet.publicKey, amount * LAMPORTS_PER_SOL).then(() => {
             alert('Airdrop successful')
             }).catch((error) => {
                 console.log(error)

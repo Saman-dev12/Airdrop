@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Navbar from "./Navbar";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 
@@ -29,7 +28,6 @@ export default function Airdrop() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-600 to-indigo-900">
-      <Navbar />
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-md mx-auto bg-white rounded-xl shadow-2xl overflow-hidden">
           <div className="p-8">

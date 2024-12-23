@@ -60,8 +60,15 @@ const SendSolComponent: React.FC = () => {
       const sign = await signTransaction(transaction);
     
   
+      const signatureData = sign.signature?.toJSON().data;
+      if (!signatureData) {
+        throw new Error("Signature data is undefined");
+      }
+      const base64 = Buffer.from(signatureData).toString('base64');
       
-      setStatus(`Sent ${amount} SOL to ${recipientAddress} with signature: ${sign}`);
+      
+      setStatus(`Sent ${amount} SOL to ${recipientAddress} with signature: ${base64}`);
+
     } catch (error: any) {
       setStatus(`Error: ${error.message}`);
     }
@@ -96,6 +103,9 @@ const SendSolComponent: React.FC = () => {
                 id="amount"
                 type="number"
                 value={amount}
+                min={0.01}
+                step={0.01}
+                
                 onChange={(e) => setAmount(parseFloat(e.target.value))}
                 className="w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 ease-in-out"
                 placeholder="Enter amount in SOL"
@@ -114,7 +124,8 @@ const SendSolComponent: React.FC = () => {
           <div className={`px-8 py-4 ${status.startsWith("Error") ? "bg-red-50" : "bg-green-50"}`}>
             <div className={`flex items-center text-sm ${status.startsWith("Error") ? "text-red-800" : "text-green-800"}`}>
               <AlertCircle className="h-5 w-5 mr-2" />
-              <p>{status}</p>
+              <p className="flex-1 font-medium w-full text-sm leading-5">{status}</p>
+
             </div>
           </div>
         )}
